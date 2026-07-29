@@ -28,6 +28,7 @@ wire logic b;
 - wire type必须是4-state，可以多驱动；var type只能单驱动；
 - sv新增加logic类型可以说正是为了替换verilog中的wire和reg类型，logic既可以是wire也可以是var；
 - 为了节省程序内存，sv新增多种2-state类型；
+- **口诀**：4值只有integer有符号，2值只有bit无符号。
 
 ### 类型转换
 

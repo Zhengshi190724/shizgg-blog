@@ -92,8 +92,47 @@ Debug：在log文件中通过` UVM error` 找到对应时间点，从Verdi波形
 > - Test：决定测试哪种应用场景；
 > - Function Coverage：收集测试过程中b已经覆盖了哪些Spec.规定的测试功能点；
 
-[^1]:`transaction`将一组有逻辑关联的引脚级操作封装成一个高层数据对象。例如一次总线读写、一个网络包、一条指令。用 `class`定义，包含数据属性（地址、数据、命令）和可能的约束。
-[^2]:`PIN level`是最底层的抽象，直接操作DUT的每个具体信号（`clk`、`rst`、`addr`、`data`、`valid`等）。
+验证需要尽可能地考虑所有的设计输入，以此来找到数据路径和控制逻辑上地漏洞，以下是具体需要考虑几个方面：
+1. 设备配置。
+2. 环境配置。-> **Env config**
+3. 输入数据。-> **Data in**
+4. 协议异常。               ↓
+5. 错误和违例。-> **Error case** 
+6. 时延。       -> **Timing**
+
+### 覆盖率收敛
+
+```mermaid
+%%{init: {
+  "theme": "dark",
+  "flowchart": {
+    "useMaxWidth": false,
+    "curve": "basis",
+    "nodeSpacing": 15,
+    "rankSpacing": 25,
+    "diagramPadding": 2,
+    "padding": 5
+  },
+  "themeVariables": {
+    "fontSize": "13px"
+  }
+}}%%
+
+flowchart LR
+    A["添加约束"]
+    B["受约束的随机测试"]
+    C["使用不同的种子<br/>多次运行"]
+    D["功能覆盖率"]
+    E["识别覆盖<br/>盲区"]
+    F["最少的代码修改"]
+    G["定向测试<br/>案例"]
+
+    A --> B --> C --> D --> E --> F --> A
+    F -.-> G -.-> D
+
+    classDef box fill:#000,stroke:#eee,color:#eee,stroke-width:1.5px;
+    class A,C,E box;
+```
 
 ### SV新增的验证特性
 
@@ -104,3 +143,7 @@ Debug：在log文件中通过` UVM error` 找到对应时间点，从Verdi波形
 - Function coverage的描述与覆盖率收集；
 - 编程语言交互接口：DPI；
 - 断言：assertion；
+
+--- 
+[^1]:`transaction`将一组有逻辑关联的引脚级操作封装成一个高层数据对象。例如一次总线读写、一个网络包、一条指令。用 `class`定义，包含数据属性（地址、数据、命令）和可能的约束。
+[^2]:`PIN level`是最底层的抽象，直接操作DUT的每个具体信号（`clk`、`rst`、`addr`、`data`、`valid`等）。
