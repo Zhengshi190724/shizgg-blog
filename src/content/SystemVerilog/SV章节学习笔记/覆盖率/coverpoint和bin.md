@@ -1,5 +1,5 @@
 ---
-title: SV 学习笔记
+title: coverpoint和bin
 date: 2026-07-15
 updated: 2026-07-18
 tags:

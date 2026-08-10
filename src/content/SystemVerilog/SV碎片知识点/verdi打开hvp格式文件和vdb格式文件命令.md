@@ -1,5 +1,5 @@
 ---
-title: SV 学习笔记
+title: verdi打开hvp格式文件和vdb格式文件命令
 date: 2026-07-15
 updated: 2026-07-18
 tags:
