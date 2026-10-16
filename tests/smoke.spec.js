@@ -113,6 +113,26 @@ test('article media is responsive, stable, and zoomable', async ({ page }) => {
   await expect(page.getByRole('dialog', { name: '整体验证层级图' })).toBeHidden();
 });
 
+test('protocol article images load from published assets', async ({ page }) => {
+  const articles = [
+    ['/posts/ic-fpga-ic笔面试之各种协议-code-i2c-code/', 4],
+    ['/posts/ic-fpga-ic笔面试之各种协议-code-spi-code/', 6],
+    ['/posts/ic-fpga-ic笔面试之各种协议-code-uart-code/', 3],
+    ['/posts/ic-fpga-ic笔面试之各种协议-ic笔面试之串行协议/', 8],
+  ];
+
+  for (const [route, expectedImages] of articles) {
+    await page.goto(route, { waitUntil: 'domcontentloaded' });
+    const images = page.locator('.post-body .article-media img');
+    await expect(images).toHaveCount(expectedImages);
+
+    for (const image of await images.all()) {
+      await image.scrollIntoViewIfNeeded();
+      await expect.poll(() => image.evaluate((element) => element.complete && element.naturalWidth > 0)).toBe(true);
+    }
+  }
+});
+
 test('ambient media uses the local poster when motion is reduced', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
