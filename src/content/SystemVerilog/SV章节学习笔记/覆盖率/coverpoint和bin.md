@@ -43,7 +43,7 @@ endgroup
 
 ``` SystemVerilog
 covergroup CovKind;
-	coverpoint tr.kind {
+	id: coverpoint tr.kind {
 		bins zero = {0}; // 1个仓代表kind==0
 		bins lo = {[1:3], 5}; // 1个仓代表1:3和5
 		bins hi[] = {[8:$]}; // 8个独立的仓代表8:15
@@ -52,8 +52,16 @@ covergroup CovKind;
 endgroup
 ```
 
-> 注意coverpoint定义使用{}而不是begin...end
-> 大括号的结尾**没有带分号”;”**
+> 【注意】
+> 1. coverpoint定义使用{}而不是begin...end
+> 2. 大括号的结尾**没有带分号”;”**
+> 3. id为覆盖点的名字，而coverpoint后接的是需要收集的变量；
+> 4. covergroup需要实例化才能进行后续采样
+
+三步法：
+1. `Define Covergroup/coverpoint/bins
+2. `this.Covergroup_name = new();
+3. `Covergroup_name.sample();
 
 可能出现的结果：
 ```
