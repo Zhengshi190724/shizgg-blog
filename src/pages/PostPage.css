@@ -82,6 +82,10 @@
   justify-content: center;
 }
 
+.post-layout--no-toc {
+  grid-template-columns: minmax(0, var(--reading-width));
+}
+
 .post-body {
   min-width: 0;
   color: var(--color-text-secondary);
@@ -319,7 +323,8 @@
 }
 
 @media (max-width: 850px) {
-  .post-layout {
+  .post-layout,
+  .post-layout--no-toc {
     grid-template-columns: 1fr;
   }
 

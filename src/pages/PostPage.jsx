@@ -204,7 +204,7 @@ export default function PostPage() {
         <PostShareActions title={post.title} path={`/posts/${post.slug}/`} />
       </header>
 
-      <div className="post-layout">
+      <div className={`post-layout${post.headings.length === 0 ? ' post-layout--no-toc' : ''}`}>
         <TableOfContents headings={post.headings} />
 
         <div className="post-body">

@@ -43,6 +43,31 @@ test('article route exposes canonical and social metadata', async ({ page }) => 
   await expect(page.locator('meta[property="article:published_time"]')).toHaveAttribute('content', '2026-07-13');
 });
 
+test('articles without a table of contents use the full reading width', async ({ page }) => {
+  const routes = [
+    '/posts/ic-fpga-ic笔面试之碎片化知识/',
+    '/posts/ic-fpga-大端对齐和小端对齐/',
+    '/posts/systemverilog-sv碎片知识点-ic验证面试之systemverilog/',
+  ];
+
+  for (const route of routes) {
+    await page.goto(route, { waitUntil: 'domcontentloaded' });
+    const layout = page.locator('.post-layout');
+    await expect(layout).toHaveClass(/post-layout--no-toc/);
+    await expect(page.locator('.post-body')).toBeVisible();
+
+    const { bodyWidth, layoutWidth } = await page.evaluate(() => ({
+      bodyWidth: document.querySelector('.post-body').getBoundingClientRect().width,
+      layoutWidth: document.querySelector('.post-layout').getBoundingClientRect().width,
+    }));
+    expect(bodyWidth).toBeGreaterThan(Math.min(600, layoutWidth * 0.8));
+  }
+
+  await page.goto(systemVerilogOverviewRoute, { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.post-layout')).not.toHaveClass(/post-layout--no-toc/);
+  await expect(page.locator('.post-layout .toc-desktop')).toHaveCount(1);
+});
+
 test('homepage presents the updated identity and animated welcome message', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
